@@ -1,64 +1,58 @@
+
+#include<stdio.h>
 #include<iostream>
-#include<cstdlib>
-
-using namespace std;
-
-const int N = 19;
-void Swap(int *,int ,int );
-void QuickSort(int* ,int ,int);
-void Insertsort(int x[], int Count);
-void Swap(int *x,int *y);     //Swap by Address
-
+ 
+int Partition(int*Array,int n,int p,int r);
+void QuickSort(int* Array,int n,int p,int r);
+ using namespace std;
 int main()
-{    
-    int NList[20];
-    for(int i = 0;i<20;i++)
-    {
-        NList[i] = rand()%11;
-    }
-    QuickSort(NList,0,N);
-    for(int i = 0;i<20;i++)
-    {
-        cout<<NList[i]<<endl;
-    }
-}
-
-void QuickSort(int* Array,int Left,int Right)
 {
-    int Mid = (Right-Left)/2;
-    cout<<"Mid: "<<Mid<<endl;
-    int Key = Array[Mid];
-    int LP = Left;
-    int RP = Right-1;
-    if(Left+3<=Right)
-    {
-        Insertsort(Array+Left, Right - Left+1);
-        return;
-    }
-    if(Array[Left]>Array[Right])
-    {
-        Swap(Array,Left,Right);
-    }
-    if(Array[Left]>Array[Mid])
-    {
-        Swap(Array,Left,Mid);
-    }
-    if(Array[Mid]>Array[Right])
-    {
-        Swap(Array,Mid,Right) ;      
-    }
-    Swap(Array, Mid,Right);
-    while(LP < RP)
-    {
-        while(Array[LP]<=Key&&LP<RP)LP++;
-        while(Array[RP]>=Key&&LP<RP)RP--;
-        Swap(Array,LP,RP);
-    }
-    Swap(Array, Mid,Right);
-    QuickSort(Array,Left,LP-1);
-    QuickSort(Array,LP+1,RP);
-    return;
-
+	int Array[8]={4,8,7,1,3,8,6,4};
+	int n=sizeof(Array)/sizeof(int);
+	int p=0;
+	int r=n-1;
+	QuickSort(Array,n,p,r);
+ 
+	for(int k=0;k<n;k++)
+		printf("%d ",Array[k]);
+	printf("\n");
+}
+ 
+ 
+int Partition(int*Array,int n,int p,int r)
+{
+    cout<<"Partition"<<endl<<" Key: "<<Array[r]<<endl;
+	int x=Array[r];
+	int i=p-1;
+	int temp=0;
+	for(int j=p;j<=r-1;j++)
+	{
+		if(Array[j]<=x)
+		{
+			i++;
+            cout<<"j = "<<j<<"  i = "<<i<<endl;
+			temp=Array[i];
+			Array[i]=Array[j];
+			Array[j]=temp;
+		}
+	}
+	temp=Array[i+1];
+	Array[i+1]=Array[r];
+	Array[r]=temp;
+ 
+	return i+1;
+}
+ 
+ 
+void QuickSort(int* Array,int n,int p,int r)
+{
+	int q=0;
+	if(p<r)
+	{
+		q=Partition(Array,n,p,r);
+		QuickSort(Array,n,p,q-1);
+		QuickSort(Array,n,q+1,r);
+	}
 }
 
 void Swap(int  *x, int  *y)
@@ -67,25 +61,4 @@ void Swap(int  *x, int  *y)
 	Temp = *x;
 	*x = *y;
 	*y = Temp;
-}
-
-void Swap(int *Array,int a,int b)
-{
-    int Temp = Array[a];
-    Array[a] = Array[b];
-    Array[b] = Temp;
-}
-
-void Insertsort(int x[], int Count)
-{
-	int j=0;
-	for (int i = 1; i < Count; i++)
-	{
-		j = i;
-		while (j > 0 && x[j] < x[j - 1])
-		{
-			Swap(&x[j], &x[j - 1]);
-			j--;
-		}
-	}
 }
